@@ -1,0 +1,29 @@
+env:
+  REPOSITORY_ROOT: "us-docker.pkg.dev/tc-platform-artifacts/theconversation"
+  REPOSITORY_LIBRARY: "${REPOSITORY_ROOT}/library"
+
+steps:
+  - label: ":docker: Build"
+    plugins:
+      docker-compose#v5.2.0:
+        build: library
+        push:
+          - "library:$REPOSITORY_LIBRARY:build-$BUILDKITE_BUILD_NUMBER"
+
+  - wait
+
+  - label: ":npm: Test"
+    command: npm run test
+    plugins:
+      docker-compose#v5.2.0:
+        run: library
+
+  - block: "Tag"
+    branches: main
+
+  - label: ":docker: Tag"
+    branches: main
+    plugins:
+      docker-compose#v5.2.0:
+        push:
+          - "library:${REPOSITORY_LIBRARY}:1.5.2-r1"
