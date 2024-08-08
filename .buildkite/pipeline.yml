@@ -12,6 +12,12 @@ steps:
 
   - wait
 
+  - label: ":eslint: Lint"
+    command: npm run lint
+    plugins:
+      docker-compose#v5.2.0:
+        run: library
+
   - label: ":npm: Test"
     command: npm run test
     plugins:
