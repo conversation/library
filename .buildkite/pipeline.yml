@@ -1,6 +1,7 @@
 env:
   REPOSITORY_ROOT: "us-docker.pkg.dev/tc-platform-artifacts/theconversation"
   REPOSITORY_LIBRARY: "${REPOSITORY_ROOT}/library"
+  IMAGE_VERSION: "1.5.2-r4"
 
 steps:
   - label: ":docker: Build"
@@ -32,4 +33,4 @@ steps:
     plugins:
       docker-compose#v5.2.0:
         push:
-          - "library:${REPOSITORY_LIBRARY}:1.5.2-r3"
+          - "library:${REPOSITORY_LIBRARY}:${IMAGE_VERSION}"
