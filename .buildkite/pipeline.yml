@@ -32,4 +32,4 @@ steps:
     plugins:
       docker-compose#v5.2.0:
         push:
-          - "library:${REPOSITORY_LIBRARY}:1.5.2-r2"
+          - "library:${REPOSITORY_LIBRARY}:1.5.2-r3"
