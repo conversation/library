@@ -119,12 +119,14 @@ function setUserInfo(req) {
     }
     return
   }
+  log.debug('Setting user info')
   const email = isSlackOauth ? req.session.passport.user.email : req.session.passport.user.emails[0].value
   req.userInfo = req.userInfo ? req.userInfo : {
     userId: req.session.passport.user.id,
     analyticsUserId: md5(req.session.passport.user.id + 'library'),
     email
   }
+  log.debug(`User info: ${JSON.stringify(req.userInfo)}`)
 }
 
 module.exports = router
