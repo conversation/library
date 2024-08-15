@@ -15,6 +15,7 @@ function stubbedProcessedDoc(unprocessedHtml, editorName) {
 
 describe('HTML processing', () => {
   const testGlobal = {}
+  const condenseHtml = (html) => html.replace(/\n/g, '').replace(/>\s+</g, '><')
 
   beforeAll(() => {
     // General supported formats
@@ -158,6 +159,31 @@ describe('HTML processing', () => {
     it('removes code block marker unicode characters', () => {
       assert.notInclude(testGlobal.native.processedHTML, '&#xEC03;')
       assert.notInclude(testGlobal.native.processedHTML, '&#xEC02;')
+    })
+
+    it('unnests start and end markers', () => {
+      const html = condenseHtml(`
+        <p>
+          <span style="font-weight:700">\uEC03</span>
+          <span style="font-weight:700">my code</span>
+        </p>
+        <p>
+          <span style="font-weight:700">\uEC02</span>
+        </p>
+      `)
+      const processedHtml = stubbedProcessedDoc(html).html
+      assert.equal(processedHtml, '<pre><code><span style="font-weight:700">my code</span></code></pre>\n<p></p>')
+    })
+
+    it('removes interior <p> tags with attributes', () => {
+      const html = condenseHtml(`
+        <p style="font-style:italic">\uEC03my code</p>
+        <p style="font-style:italic">more code</p>
+        <p style="font-style:italic">\uEC02</p>
+      `)
+      console.log(html)
+      const processedHtml = stubbedProcessedDoc(html).html
+      assert.equal(processedHtml, '<pre><code>my code\nmore code</code></pre>\n<p style="font-style:italic"></p>')
     })
   })
 
