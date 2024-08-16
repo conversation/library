@@ -57,6 +57,24 @@ router.use(session({
 router.use(passport.initialize())
 router.use(passport.session())
 
+// With passport 0.6.0 and above, req.session.save is not always set, which
+// breaks passport's logout functionality. There's no official fix, so work
+// around this by stubbing these methods when not available.
+// https://github.com/jaredhanson/passport/issues/904#issuecomment-1358150251
+router.use((req, res, next) => {
+  if (req.session && !req.session.regenerate) {
+    req.session.regenerate = (cb) => {
+      cb()
+    }
+  }
+  if (req.session && !req.session.save) {
+    req.session.save = (cb) => {
+      cb()
+    }
+  }
+  next()
+})
+
 // seralize/deseralization methods for extracting user information from the
 // session cookie and adding it to the req.passport object
 passport.serializeUser((user, done) => done(null, user))
@@ -72,9 +90,11 @@ const googleLoginOptions = {
 
 router.get('/login', passport.authenticate(authStrategy, isSlackOauth ? {} : googleLoginOptions))
 
-router.get('/logout', (req, res) => {
-  req.logout()
-  res.redirect('/')
+router.get('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err)
+    res.redirect('/')
+  })
 })
 
 router.get('/auth/redirect', passport.authenticate(authStrategy, {failureRedirect: formatUrl('/login')}), (req, res) => {
