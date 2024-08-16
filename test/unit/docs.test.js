@@ -23,15 +23,9 @@ describe('Docs', () => {
   })
 
   describe('Fetching Sheets', () => {
-    it('should fetch sheet data with expected structure', async () => {
-      const sheet = await fetchDoc('id-sheet', 'spreadsheet', {})
-      expect(sheet).to.include.keys(PAYLOAD_KEYS)
-    })
-
-    it('should successully parse the sheet to a html table', async () => {
+    it('does not support viewing spreadsheets', async () => {
       const {html} = await fetchDoc('id-sheet', 'spreadsheet', {})
-      expect(html).includes('<table>')
-      expect(html).includes('</table>')
+      expect(html).includes('Library does not support viewing spreadsheets yet.')
     })
   })
 

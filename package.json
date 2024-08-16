@@ -29,8 +29,7 @@
     "sass": "^1.77.8",
     "slugify": "^1.4.5",
     "unescape": "^1.0.1",
-    "winston": "^2.4.5",
-    "xlsx": "^0.18.5"
+    "winston": "^2.4.5"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
