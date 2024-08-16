@@ -393,6 +393,8 @@
     list-style: none;
 
     li {
+      margin: 0px 0 5px 0;
+      font-size: 15px;
       a {
         color: $gray-20;
 
@@ -404,8 +406,6 @@
           }
         }
       }
-      margin: 0px 0 5px 0;
-      font-size: 15px;
 
       @include tablet{
         margin: 13px 0;
@@ -465,7 +465,7 @@
   justify-content: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center; 
+  align-items: center;
 
   // The inner wrapper allows us to fit the button onto the bottom right
   // corner no matter the image dimenension
@@ -540,5 +540,3 @@
         border-color: lightgray;
     }
 }
-
-
