@@ -124,8 +124,8 @@ describe('HTML processing', () => {
 
     it('scrubs smart quotes', () => {
       const codeBlock = testGlobal.general.output('pre > code[data-lang="javascript"]')
-      assert.match(codeBlock.html(), /singleQuotedStr = .*&apos;str&apos;/)
-      assert.match(codeBlock.html(), /doubleQuotedStr = .*&quot;str&quot;/)
+      assert.match(codeBlock.html(), /singleQuotedStr = .*'str'/)
+      assert.match(codeBlock.html(), /doubleQuotedStr = .*"str"/)
     })
 
     it('allows unregistered languages', () => {

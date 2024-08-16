@@ -111,7 +111,7 @@ function formatCode(html) {
 
   // Preformat native code blocks
   // Unnest native code block start and end markers
-  html = html.replace(/<span[^>]*>(&#xEC0[23];)<\/span>/ig, (match, marker) => {
+  html = html.replace(/<span[^>]*>([\uEC02\uEC03])<\/span>/ig, (match, marker) => {
     return marker
   })
 
@@ -119,7 +119,7 @@ function formatCode(html) {
   // Google docs interleaves the end-of-code marker with the following tag. eg:
   // <p>&#xEC03;my code block</p><h2>&#xEC02;my heading</h2>
   // Make sure we match and retain the following tag
-  html = html.replace(/<p[^>]*>&#xEC03;(.*?)<\/p>(<[^>]*>)&#xEC02;/ig, (match, content, followingTag) => {
+  html = html.replace(/<p[^>]*>\uEC03(.*?)<\/p>(<[^>]*>)\uEC02/ig, (match, content, followingTag) => {
     return `${formatCodeBlock(content)}${followingTag}`
   })
 
@@ -171,8 +171,8 @@ function formatCodeBlock(content) {
 }
 
 function formatCodeContent(content) {
-  content = content.replace(/[‘’]|&#x201[89];/g, "'").replace(/[“”]|&#x201[CD];/g, '"') // remove smart quotes
-  content = content.replace(/`/g, '&#96;') // remove internal cases of backticks
+  content = content.replace(/[‘’]|[\u2018\u2019]/g, "'").replace(/[“”]|[\u201C\u201D]/g, '"') // remove smart quotes
+  content = content.replace(/`/g, '&#96;') // remove internal cases of backticksf
   return content
 }
 
