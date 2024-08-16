@@ -34,6 +34,8 @@ const unauthorizedUser = {
   userId: '13'
 }
 
+jest.mock('../../server/logger')
+
 describe('Authentication', () => {
   describe('.env specified oauth strategy', () => {
     const sandbox = sinon.createSandbox()
@@ -48,13 +50,18 @@ describe('Authentication', () => {
 
     it('should warn if there is an invalid strategy specified', () => {
       process.env.OAUTH_STRATEGY = 'fakjkjfdz'
-      const spy = sandbox.spy(log, 'warn')
+      const logger = {
+        debug: jest.fn(),
+        info: jest.fn(),
+        warn: jest.fn()
+      }
+      jest.doMock('../../server/logger', () => logger)
       const appWithInvalidOauth = require('../../server/index') // need to redo app setup
       return request(appWithInvalidOauth)
         .get('/login')
         .expect(302)
         .then((res) => {
-          assert.isTrue(spy.called, 'warn was not called')
+          expect(logger.warn).toHaveBeenCalledWith('Invalid oauth strategy fakjkjfdz specific, defaulting to google auth')
           assert.match(res.headers.location, /google/)
         })
     })
