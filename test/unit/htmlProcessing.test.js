@@ -181,7 +181,6 @@ describe('HTML processing', () => {
         <p style="font-style:italic">more code</p>
         <p style="font-style:italic">\uEC02</p>
       `)
-      console.log(html)
       const processedHtml = stubbedProcessedDoc(html).html
       assert.equal(processedHtml, '<pre><code>my code\nmore code</code></pre>\n<p style="font-style:italic"></p>')
     })
