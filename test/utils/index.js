@@ -39,10 +39,10 @@ exports.allFilenames = [].concat(...Object.keys(listing).map((pageName, i) => {
   }, [])
 }))
 
-nock('accounts.google.com')
+nock('http://accounts.google.com')
   .get('*')
   .reply(200)
 
-nock('www.google.apis.com')
+nock('http://www.google.apis.com')
   .get('*')
   .reply(200)
