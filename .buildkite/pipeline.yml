@@ -1,7 +1,7 @@
 env:
   REPOSITORY_ROOT: "us-docker.pkg.dev/tc-platform-artifacts/theconversation"
   REPOSITORY_LIBRARY: "${REPOSITORY_ROOT}/library"
-  IMAGE_VERSION: "1.5.2-r6"
+  IMAGE_VERSION: "1.5.2-r7"
 
 steps:
   - label: ":docker: Build"
