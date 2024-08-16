@@ -15,24 +15,18 @@ let datastoreClient
 // Middleware to record views into Cloud Datastore
 // express-promsie-router will call next() if the return value is 'next'.
 router.use(async (req, res) => {
-  log.debug('Checking datastoreClient')
   if (datastoreClient === null) return 'next'
-
-  log.debug('Got datastoreClient')
 
   if (!datastoreClient) {
     datastoreClient = await getDatastoreClient()
-    log.debug(`Building datastoreClient: ${datastoreClient}`)
     if (!datastoreClient) return 'next' // if there is still no client, continue
   }
 
   req.on('end', () => {
-    log.debug('Recording view')
     if (!res.locals.docId) return
 
     const docMeta = getMeta(res.locals.docId)
     const userInfo = req.userInfo
-    log.debug(`Got docMeta: ${docMeta} and userInfo: ${userInfo}`)
     if (!docMeta || !userInfo) return
 
     recordView(docMeta, userInfo, datastoreClient)
@@ -136,7 +130,6 @@ async function getDatastoreClient() {
 }
 
 function recordView(docMeta, userInfo, datastoreClient) {
-  log.debug(`Recording view for doc: ${docMeta.id}`)
   const docKey = datastoreClient.key(['LibraryViewDoc', [userInfo.userId, docMeta.id].join(':')])
   updateViewRecord(docKey, {documentId: docMeta.id}, userInfo, datastoreClient)
 
@@ -156,12 +149,10 @@ function updateViewRecord(viewKey, metadata, userInfo, datastoreClient) {
       let updatedData
 
       if (existing) {
-        log.debug(`Updating view record for ${userInfo.userId} for ${metadata.documentId || metadata.teamId}`)
         updatedData = existing
         existing.viewCount += 1
         existing.lastViewedAt = new Date()
       } else {
-        log.debug(`Creating new view record for ${userInfo.userId} for ${metadata.documentId || metadata.teamId}`)
         updatedData = Object.assign({
           userId: userInfo.userId,
           email: userInfo.email,
