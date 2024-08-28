@@ -3,9 +3,13 @@ env:
   REPOSITORY_LIBRARY: "${REPOSITORY_ROOT}/library"
   IMAGE_VERSION: "1.5.2-r9"
 
+agents:
+  queue: small_amd64
+
 steps:
   - label: ":docker: Build"
     plugins:
+      conversation/hosted-agent-setup:
       docker-compose#v5.2.0:
         build: library
         push:
@@ -16,12 +20,14 @@ steps:
   - label: ":eslint: Lint"
     command: npm run lint
     plugins:
+      conversation/hosted-agent-setup:
       docker-compose#v5.2.0:
         run: library
 
   - label: ":npm: Test"
     command: npm run test
     plugins:
+      conversation/hosted-agent-setup:
       docker-compose#v5.2.0:
         run: library
 
@@ -31,6 +37,7 @@ steps:
   - label: ":docker: Tag"
     branches: main
     plugins:
+      conversation/hosted-agent-setup:
       docker-compose#v5.2.0:
         push:
           - "library:${REPOSITORY_LIBRARY}:${IMAGE_VERSION}"
